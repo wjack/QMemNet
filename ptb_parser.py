@@ -25,9 +25,9 @@ def build_datasets(train_path, dev_path, test_path, N):
 
     word_to_index = vectorizer.vocabulary_
     index_to_word = vectorizer.get_feature_names()
-    x_train_ptb, label_train_ptb = file_to_dataset(train_path, N, word_to_index)
-    x_dev_ptb, label_dev_ptb = file_to_dataset(dev_path, N, word_to_index)
-    x_test_ptb, label_test_ptb = file_to_dataset(test_path, N, word_to_index)
+    x_train_ptb, label_train_ptb = file_to_dataset(train_path, N, vectorizer)
+    x_dev_ptb, label_dev_ptb = file_to_dataset(dev_path, N, vectorizer)
+    x_test_ptb, label_test_ptb = file_to_dataset(test_path, N, vectorizer)
 
     return x_train_ptb, x_dev_ptb, x_test_ptb, label_train_ptb, label_dev_ptb, label_test_ptb, word_to_index, index_to_word
 
@@ -36,7 +36,7 @@ def split(input_string):
     return input_string.split()
 
 
-def file_to_dataset(filepath, N, word_to_index):
+def file_to_dataset(filepath, N, vectorizer):
     #convert file to dataset, returns X and Y tensors of integer indexes describing the N words (X) leading up to (Y)
     f = open(filepath)
     lines = f.readlines()
@@ -50,10 +50,10 @@ def file_to_dataset(filepath, N, word_to_index):
         words = padding + words[:-1]
         for i in range(0, len(words) - N):
             x = []
-            y = word_to_index[words[i+N]]
+            y = vectorizer.transform(words[i+N]).toarray()
             x_words = words[i:i+N]
             for word in x_words:
-                x.append(word_to_index[word])
+                x.append(vectorizer.transform(word).toarray())
             X.append(x)
             Y.append(y)
 
