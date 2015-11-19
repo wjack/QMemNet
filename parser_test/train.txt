@@ -1,0 +1,6 @@
+this is the training dataset
+it isnt actually supposed to be used for training
+its very short
+youd have a bad model
+this could be a shitty haiku
+it is not
