@@ -25,8 +25,8 @@ def model(A_embed_weights, B_embed_weights, C_embed_weights, W_output_weights, T
 
 
     #T_C and T_M are learned matricies that account for time encoding
-    embedded_m_memory = tf.add(tf.matmul(input_vectors, A_embed_weights, a_is_sparse = True), T_C_encoding_weights)
-    embedded_c_memory  = tf.matmul(input_vectors, C_embed_weights, a_is_sparse = True), T_M_encoding_weights)
+    embedded_m_memory = tf.add(tf.matmul(A_embed_weights, input_vectors, b_is_sparse = True), T_C_encoding_weights)
+    embedded_c_memory  = tf.matmul(C_embed_weights,input_vectors, b_is_sparse = True), T_M_encoding_weights)
 
     #compute match between embedded memories in m_memory, and embedded query, p is a probability vector over the inputs.
 
