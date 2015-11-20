@@ -25,8 +25,11 @@ def build_datasets(train_path, dev_path, test_path, N):
 
     word_to_index = vectorizer.vocabulary_
     index_to_word = vectorizer.get_feature_names()
+    print('Parsing train data...')
     x_train_ptb, label_train_ptb = file_to_dataset(train_path, N, vectorizer)
+    print('Parsing dev data...')
     x_dev_ptb, label_dev_ptb = file_to_dataset(dev_path, N, vectorizer)
+    print('Parsing test data...')
     x_test_ptb, label_test_ptb = file_to_dataset(test_path, N, vectorizer)
 
     return x_train_ptb, x_dev_ptb, x_test_ptb, label_train_ptb, label_dev_ptb, label_test_ptb, word_to_index, index_to_word
@@ -42,7 +45,11 @@ def file_to_dataset(filepath, N, vectorizer):
     lines = f.readlines()
     X = []
     Y = []
+    line_index = 0
     for line in lines:
+        if line_index % 1000 == 0:
+            print(str(line_index) +'/' len(lines) + ' lines read...')
+        line_index +=1
         words =  line.split()
         padding = (N-1)*['<pre>']
 
@@ -58,4 +65,4 @@ def file_to_dataset(filepath, N, vectorizer):
             Y.append(y)
 
     return tf.convert_to_tensor(X), tf.convert_to_tensor(Y)
-#x_train_ptb, x_dev_ptb, x_test_ptb, label_train_ptb, label_dev_ptb, label_test_ptb, word_to_index, index_to_word = build_datasets('parser_test/train.txt', 'parser_test/dev.txt', 'parser_test/test.txt', 2)
+x_train_ptb, x_dev_ptb, x_test_ptb, label_train_ptb, label_dev_ptb, label_test_ptb, word_to_index, index_to_word = build_datasets('ptb_data/ptb.train.txt', 'ptb_data/ptb.valid.txt', 'ptb_data/ptb.test.txt', 2)

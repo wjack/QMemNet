@@ -22,20 +22,11 @@ def model(A_embed_weights, B_embed_weights, C_embed_weights, W_output_weights, T
     #model performs k = 1 memory hops
 
     #encode input vectors into m and c memory
-    m_memory = []
-    c_memory = []
 
-    vector_index = 0
-    for input_vector in input_vectors:
-        #T_C and T_M are learned matricies that account for time encoding 
-        embedded_m_vector = tf.add(tf.matmul(input_vector, A_embed_weights, a_is_sparse = True), T_C_encoding_weights[:, vector_index])
-        embedded_c_vector  = tf.matmul(input_vector, C_embed_weights, a_is_sparse = True), T_M_encoding_weights[:, vector_index]
-        m_memory.append(embedded_m_vector)
-        c_memory.append(embedded_c_vector)
 
-        vector_index += 1
-    m_memory = tf.convert_to_tensor(m_memory, dtype = tf.float32)
-    c_memory = tf.convert_to_tensor(c_memory, dtype = tf.float32)
+    #T_C and T_M are learned matricies that account for time encoding
+    embedded_m_memory = tf.add(tf.matmul(input_vectors, A_embed_weights, a_is_sparse = True), T_C_encoding_weights)
+    embedded_c_memory  = tf.matmul(input_vectors, C_embed_weights, a_is_sparse = True), T_M_encoding_weights)
 
     #compute match between embedded memories in m_memory, and embedded query, p is a probability vector over the inputs.
 
